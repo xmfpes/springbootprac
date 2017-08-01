@@ -1,16 +1,37 @@
-package org.kyu.obj;
+package org.kyu.domain;
 
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+
+@Entity
 public class User {
+	@Id
+	@GeneratedValue
+	private Long id;
+	
+	@Column(nullable=false, length=20)
 	private String userId;
+
 	private String password;
 	private String name;
 	private String email;
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", password=" + password + ", name=" + name + ", email=" + email + "]";
+		return "User [id=" + id + ", userId=" + userId + ", password=" + password + ", name=" + name + ", email="
+				+ email + "]";
 	}
 	public String getUserId() {
 		return userId;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
