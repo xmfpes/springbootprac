@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+{{> include/header}}
+</head>
+{{> include/nav}}
+<body>
+<div class="container" id="main">
+	<div class="panel panel-default content-main">
+		<h1>숫자 야구 게임..</h1>
+		{{baseBall}}
+		게임 결과 : {{result}}
+		<a href="/input">다시 도전하기</a><br>
+		<a href="/newgame">상대 숫자 초기화</a>
+	</div>
+</div>
+</body>
+</html>
