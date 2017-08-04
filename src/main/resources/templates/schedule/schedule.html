@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+{{> include/header}}
+<meta charset="utf-8">
+<link href="fullcalendar/fullcalendar.min.css" rel="stylesheet">
+<link href="fullcalendar/fullcalendar.print.min.css" rel="stylesheet"
+	media="print">
+<script src="fullcalendar/lib/moment.min.js"></script>
+<script src="fullcalendar/lib/jquery.min.js"></script>
+<script src="fullcalendar/lib/jquery-ui.min.js"></script>
+<script src="fullcalendar/fullcalendar.min.js"></script>
+<script>
+	$(document).ready(function() {
+
+		/* initialize the external events
+		-----------------------------------------------------------------*/
+
+		$('#external-events .fc-event').each(function() {
+
+			// store data so the calendar knows to render an event upon drop
+			$(this).data('event', {
+				title : $.trim($(this).text()), // use the element's text as the event title
+				stick : true
+			// maintain when user navigates (see docs on the renderEvent method)
+			});
+
+			// make the event draggable using jQuery UI
+			$(this).draggable({
+				zIndex : 999,
+				revert : true, // will cause the event to go back to its
+				revertDuration : 0
+			//  original position after the drag
+			});
+
+		});
+
+		/* initialize the calendar
+		-----------------------------------------------------------------*/
+
+		$('#calendar').fullCalendar({
+			header : {
+				left : 'prev,next today',
+				center : 'title',
+				right : 'month,agendaWeek,agendaDay'
+			},
+			editable : true,
+			droppable : true, // this allows things to be dropped onto the calendar
+			drop : function() {
+				// is the "remove after drop" checkbox checked?
+				if ($('#drop-remove').is(':checked')) {
+					// if so, remove the element from the "Draggable Events" list
+					$(this).remove();
+				}
+			}
+		});
+
+	});
+</script>
+<style>
+.point {
+	display: inline-block;
+	width: 5px;
+	height: 5px;
+	border-radius: 500px;
+	margin: 0 .5em;
+	background-color: #ddd;
+	vertical-align: baseline;
+}
+
+.point-xl {
+	width: 16px;
+	height: 16px;
+}
+.schedule-main{
+	padding-top:120px;
+	width:100%;
+}
+calendar{
+	
+}
+</style>
+</head>
+{{> include/nav}}
+<body>
+	<a href="javascript:void(0);" class="point point-purple point-xl"></a>
+	<div class="schedule-main">
+		<div class="row">
+			<div class="col-md-3">
+				<div id="external-events" class="panel panel-default content-main">
+					<h4>일정 목록</h4>
+					<div class="fc-event ui-draggable ui-draggable-handle">My
+						Event 1</div>
+					<div class="fc-event ui-draggable ui-draggable-handle">My
+						Event 2</div>
+					<div class="fc-event ui-draggable ui-draggable-handle">My
+						Event 3</div>
+					<div class="fc-event ui-draggable ui-draggable-handle">My
+						Event 4</div>
+					<div class="fc-event ui-draggable ui-draggable-handle">My
+						Event 5</div>
+					<p>
+						<input type="checkbox" id="drop-remove"> <label
+							for="drop-remove">remove after drop</label>
+					</p>
+				</div>
+				<div id="add-events" class="panel panel-default content-main">
+					<h4>일정 입력</h4>
+					<div class="panel-body">
+						<div class="input-group mb">
+							<input type="text" placeholder="일정 입력"
+								class="form-control external-event-name">
+							<div class="input-group-btn">
+								<button type="button"
+									class="btn btn-default external-event-add-btn">추가</button>
+							</div>
+						</div>
+						<p class="text-muted">
+							<small>색상 선택</small>
+						</p>
+						<ul class="list-inline external-event-color-selector">
+							<li class="p0"><a href="javascript:void(0);"
+								class="point point-danger point-xl selected"></a></li>
+							<li class="p0"><a href="javascript:void(0);"
+								class="point point-primary point-xl"></a></li>
+							<li class="p0"><a href="javascript:void(0);"
+								class="point point-info point-xl"></a></li>
+							<li class="p0"><a href="javascript:void(0);"
+								class="point point-success point-xl"></a></li>
+							<li class="p0"><a href="javascript:void(0);"
+								class="point point-warning point-xl"></a></li>
+							<li class="p0"><a href="javascript:void(0);"
+								class="point point-green point-xl"></a></li>
+							<li class="p0"><a href="javascript:void(0);"
+								class="point point-pink point-xl"></a></li>
+							<li class="p0"><a href="javascript:void(0);"
+								class="point point-inverse point-xl"></a></li>
+							<li class="p0"><a href="javascript:void(0);"
+								class="point point-purple point-xl"></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-default content-main col-md-9">
+				<div id="calendar"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

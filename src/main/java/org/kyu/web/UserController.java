@@ -31,7 +31,7 @@ public class UserController {
 		return "/user/updateForm";
 	}
 	
-	@GetMapping("/{id}/profile")
+	@GetMapping("/{id}")
 	public String showProfile(@PathVariable Long id, Model model) {
 		model.addAttribute("user", userRepository.findOne(id+1));
 		return "/user/profile";
