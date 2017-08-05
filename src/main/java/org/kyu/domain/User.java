@@ -24,6 +24,11 @@ public class User {
 		return "User [id=" + id + ", userId=" + userId + ", password=" + password + ", name=" + name + ", email="
 				+ email + "]";
 	}
+	public void update(User user) {
+		this.password = user.getPassword();
+		this.email = user.getEmail();
+		this.name = user.getName();
+	}
 	public String getUserId() {
 		return userId;
 	}

@@ -1,0 +1,68 @@
+#external-events .fc-event {
+    margin: 5px;
+    cursor: pointer;
+}
+.row{
+	margin:15px;
+}
+.fc-event{
+	padding:5px;
+}
+.point {
+	display:inline-block;
+	width: 5px;
+	height: 5px;
+	border-radius: 500px;
+	margin: 0 .5em;
+	background-color: #ddd;
+	vertical-align: baseline;
+}
+
+.point-xl {
+	width: 16px;
+	height: 16px;
+}
+
+.schedule-main {
+	padding-top: 120px;
+}
+
+.point-primary {
+	background-color: #3498db;
+}
+
+.point-success {
+	background-color: #27ae60;
+}
+
+.point-info {
+	background-color: #00afd1;
+}
+
+.point-warning {
+	background-color: #ffc61d;
+}
+
+.point-danger {
+	background-color: #f6504d;
+}
+
+.point-green {
+	background-color: #01b6ad;
+}
+
+.point-pink {
+	background-color: #ff3366;
+}
+
+.point-inverse {
+	background-color: #2d2d2d;
+}
+
+.point-purple {
+	background-color: #9b59b6;
+}
+
+.external-event-color-selector .point.selected {
+	border: 3px solid rgba(255, 255, 255, 0.5);
+}

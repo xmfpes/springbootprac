@@ -11,7 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/users")
@@ -25,15 +27,26 @@ public class UserController {
 		return "/user/form";
 	}
 	
-	@GetMapping("/{id}/form")
+	@PutMapping("/{id}")
+	public String update(@PathVariable Long id, User newUser) {
+		User user = userRepository.findOne(id);
+		System.out.println("update name :" + newUser.getName());
+		user.update(newUser);
+		System.out.println("name : " + newUser.getName());
+		System.out.println("zzzzz : " + newUser.getEmail());
+		userRepository.save(user);
+		return "redirect:/users";
+	}
+	
+	@GetMapping("/{id}/update")
 	public String updateForm(@PathVariable Long id, Model model) {
 		model.addAttribute("user", userRepository.findOne(id));
 		return "/user/updateForm";
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{id}/profile")
 	public String showProfile(@PathVariable Long id, Model model) {
-		model.addAttribute("user", userRepository.findOne(id+1));
+		model.addAttribute("user", userRepository.findOne(id));
 		return "/user/profile";
 	}
 	
