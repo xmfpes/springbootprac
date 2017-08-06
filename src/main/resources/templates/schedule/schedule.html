@@ -2,15 +2,9 @@
 <html>
 <head>
 {{> include/header}}
-<meta charset="utf-8">
-<link href="fullcalendar/fullcalendar.min.css" rel="stylesheet">
-<link href="fullcalendar/fullcalendar.print.min.css" rel="stylesheet" media="print">
-<script src="fullcalendar/lib/moment.min.js"></script>
-<script src="fullcalendar/lib/jquery.min.js"></script>
-<script src="fullcalendar/lib/jquery-ui.min.js"></script>
-<script src="fullcalendar/fullcalendar.min.js"></script>
-<link href="fullcalendar/public/design.css" rel="stylesheet">
-<script src="fullcalendar/public/schedule.js"></script>
+<link href="/fullcalendar/fullcalendar.min.css" rel="stylesheet">
+<link href="/fullcalendar/fullcalendar.print.min.css" rel="stylesheet" media="print">
+<link href="/fullcalendar/public/design.css" rel="stylesheet">
 </head>
 {{> include/nav}}
 
@@ -86,6 +80,12 @@
 			</div>
 		</div>
 	</div>
-	{{> include/footer}}
+
+	<script src="/fullcalendar/lib/moment.min.js"></script>
+	<script src="/fullcalendar/lib/jquery.min.js"></script>
+	<script src="/fullcalendar/lib/jquery-ui.min.js"></script>
+	<script src="/fullcalendar/fullcalendar.min.js"></script>
+	<script src="/fullcalendar/public/schedule.js"></script>
+	
 </body>
 </html>

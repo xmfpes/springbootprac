@@ -1,0 +1,1 @@
+INSERT INTO USER (USER_ID, PASSWORD, NAME, EMAIL) VALUES('xmfpes', '123123', 'kyunam', 'kyunam@naver.com');

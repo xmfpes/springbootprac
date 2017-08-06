@@ -62,7 +62,6 @@ $(document).ready(function() {
 				//new_event.owner_id = $_SESS['user_id']		
 				console.log(event);
 				console.log(new_event);
-				insertdb(new_event);
 			}
 	    },
 	    eventResizeStop :function( event, jsEvent, ui, view ) { 
@@ -163,10 +162,7 @@ $(document).ready(function() {
 		//  original position after the drag
 		});
 	}
-	
-	function insertdb(event){
-		
-	}
+
     var isEventOverDiv = function(x, y) {
 
         var external_events = $( '#external-events' );
