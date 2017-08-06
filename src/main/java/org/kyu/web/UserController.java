@@ -3,6 +3,8 @@ package org.kyu.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.kyu.domain.User;
 import org.kyu.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,11 +52,26 @@ public class UserController {
 		return "/user/profile";
 	}
 	
-	@GetMapping("/login")
-	public String login() {
-		return "/user/login";
+	@GetMapping("/loginForm")
+	public String loginForm() {
+		return "/user/loginForm";
 	}
-	
+	@PostMapping("/login")
+	public String login(String userId, String password, HttpSession session) {
+		User user = userRepository.findByUserId(userId);
+		if(user == null) {
+			System.out.println("login failed");
+			return "redirect:/users/loginForm";
+		}
+		if(!password.equals(user.getPassword())) {
+			System.out.println("login failed");
+			return "redirect:/users/loginForm";
+		}
+		System.out.println("login success");
+		session.setAttribute("user", user);
+		
+		return "redirect:/";
+	}
 	@PostMapping("")
 	public String create(User user){
 		userRepository.save(user);

@@ -1,6 +1,6 @@
 package org.kyu.web;
 
-import org.kyu.domain.QnaRepository;
+import org.kyu.domain.QuestionRepository;
 import org.kyu.domain.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/qna")
-public class QnaController {
+public class QuestionController {
 	
 	@Autowired
-	private QnaRepository qnarepository;
+	private QuestionRepository questionrepository;
 	
 	@GetMapping("/form")
 	public String form() {
@@ -24,19 +24,19 @@ public class QnaController {
 	
 	@GetMapping("/{id}")
 	public String show(@PathVariable Long id, Model model) {
-		model.addAttribute("qna", qnarepository.findOne(id));
+		model.addAttribute("qna", questionrepository.findOne(id));
 		return "qna/show";
 	}
 	
 	@GetMapping("")
 	public String list(Model model) {
-		model.addAttribute("qnas", qnarepository.findAll());
+		model.addAttribute("qnas", questionrepository.findAll());
 		return "qna/list";
 	}
 	
 	@PostMapping("")
 	public String create(Question qus) {
-		qnarepository.save(qus);
+		questionrepository.save(qus);
 		return "redirect:/qna";
 	}
 }
