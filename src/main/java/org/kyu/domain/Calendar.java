@@ -13,7 +13,19 @@ public class Calendar {
 	@GeneratedValue
 	private Long id;
 	
-	private Color backgroundColor;
+	private String backgroundColor;
+	private String borderColor;
+	
+	public void updateDate(Calendar calendar) {
+		this.start = calendar.getStart();
+		this.end = calendar.getEnd();
+	}
+	public String getBorderColor() {
+		return borderColor;
+	}
+	public void setBorderColor(String borderColor) {
+		this.borderColor = borderColor;
+	}
 	private String title;
 	private Date start;
 	private Date end;
@@ -26,10 +38,10 @@ public class Calendar {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Color getBackgroundColor() {
+	public String getBackgroundColor() {
 		return backgroundColor;
 	}
-	public void setBackgroundColor(Color backgroundColor) {
+	public void setBackgroundColor(String backgroundColor) {
 		this.backgroundColor = backgroundColor;
 	}
 	public String getTitle() {
@@ -70,9 +82,9 @@ public class Calendar {
 	}
 	@Override
 	public String toString() {
-		return "Calendar [id=" + id + ", backgroundColor=" + backgroundColor + ", title=" + title + ", start=" + start
-				+ ", end=" + end + ", allDay=" + allDay + ", editable=" + editable + ", durationEditable="
-				+ durationEditable + "]";
+		return "Calendar [id=" + id + ", backgroundColor=" + backgroundColor + ", borderColor=" + borderColor
+				+ ", title=" + title + ", start=" + start + ", end=" + end + ", allDay=" + allDay + ", editable="
+				+ editable + ", durationEditable=" + durationEditable + "]";
 	}
 	
 }

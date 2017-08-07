@@ -13,11 +13,16 @@ public class User {
 	@GeneratedValue
 	private Long id;
 	
-	@Column(nullable=false, length=20, unique=true)
+	@Column(nullable=false, length=25, unique=true)
 	private String userId;
-
+	
+	@Column(nullable=false, length=25)
 	private String password;
+	
+	@Column(nullable=false, length=25)
 	private String name;
+	
+	@Column(length=50)
 	private String email;
 	@Override
 	public String toString() {

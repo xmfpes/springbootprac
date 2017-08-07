@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -30,7 +31,8 @@ public class UserController {
 	}
 	
 	@PutMapping("/{id}")
-	public String update(@PathVariable Long id, User updateUser, HttpSession session) {
+	public String update(@PathVariable Long id, @RequestParam User updateUser, HttpSession session) {
+		System.out.println("put user : " + updateUser);
 		Object tempUser = session.getAttribute("sessionedUser");
 		if(tempUser == null) {
 			return "redirect:/users/loginForm";
@@ -63,7 +65,7 @@ public class UserController {
 		return "/user/updateForm";
 	}
 	
-	@GetMapping("/{id}/profile")
+	@GetMapping("/{id}")
 	public String showProfile(@PathVariable Long id, Model model) {
 		model.addAttribute("user", userRepository.findOne(id));
 		return "/user/profile";

@@ -13,6 +13,14 @@ $(document).ready(function() {
 			week : '주간 계획',
 			day : '일간 계획'
 		},
+		eventSources: [
+
+	        // your event source
+	        {
+	            url: '/schedule/load',
+	            type: 'POST',
+	        }
+	    ],
 		timeFormat : "HH:mm",
 		monthNames: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
 		monthNamesShort: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
@@ -27,42 +35,56 @@ $(document).ready(function() {
                 $(this).remove();
             }
 		},
-		eventReceive: function(event){
-			
-		},
 		eventDrop: function(event, delta, revertFunc) {
-	        alert(event.title + "일정을 " + event.start.format() + "날짜로 옮깁니다.");
-
+	        alert(event.id + "일정을 " + event.start.format() + "날짜로 옮깁니다.");
+	        alert(event.id);
+	        alert(event.title);
 	        if (!confirm("일정을 변경하시겠어요?")) {
 	            revertFunc();
 	        }
+	        
+	        updateEvent(event);
 
 	    },
-	    eventAfterRender:function(event, element, view){
-		    	var _id = event._id,
-				expr = /_fc\d/;
-			var match = expr.exec(_id);	
-			var is_fc = expr.test(_id);
-			if(!event.id && is_fc){
-				var new_event = {};
-				new_event.title = event.title;
-				console.log(new_event.title);
-				new_event.start = event.start;
-				console.log(new_event.start);
-				new_event.end = event.end;
-				console.log(new_event.end);
-				new_event.backgroundColor = event.backgroundColor;
-				console.log(new_event.backgroundColor);
-				new_event.borderColor = event.borderColor;
-				console.log(new_event.borderColor);
-				new_event.editable = event.editable;
-				console.log(new_event.editable);
-				new_event.durationEditable = event.durationEditable;
-				console.log(new_event.durationEditable);
-				//new_event.owner_id = $_SESS['user_id']		
-				console.log(event);
-				console.log(new_event);
-			}
+	    eventAfterRender : function(event, element, view){
+	    		
+	    },
+	    eventReceive:function(event){
+
+	    	var new_event = {};
+	    		$.ajax({
+	    		  dataType: "json",
+	    		  url: 'schedule/getcurrent',
+	    		  success:function(result){
+					event.id = result + 1;
+					alert(new_event.id);
+				},
+				error:function(result){
+					alert(result);
+				}
+	    		});
+	    		
+			new_event.borderColor = event.borderColor;
+			new_event.title = event.title;
+			new_event.start = event.start;
+			new_event.backgroundColor = event.backgroundColor;
+			new_event.end = event.end;
+			new_event.borderColor = event.borderColor;
+			new_event.editable = event.editable;
+			new_event.durationEditable = event.durationEditable;
+			new_event.allDay = event.allDay;
+			
+			console.log(new_event.title);
+			console.log(new_event.start);
+			console.log(new_event.end);
+			console.log(new_event.backgroundColor);
+			console.log(new_event.borderColor);
+			console.log(new_event.editable);
+			console.log(new_event.durationEditable);
+			//new_event.owner_id = $_SESS['user_id']		
+			console.log(event);
+			console.log(new_event);
+			insertEvent(new_event);
 	    },
 	    eventResizeStop :function( event, jsEvent, ui, view ) { 
 	    		alert("일정 변경");
@@ -74,7 +96,7 @@ $(document).ready(function() {
             }
         },
         eventRender: function(event, element) {
-			
+        		
 	    }
 	});
 	
@@ -100,6 +122,7 @@ $(document).ready(function() {
 		//  original position after the drag
 		});
 	});
+
 	
 	//external event form
 	var externalEvents = $('#external-events');
@@ -145,7 +168,6 @@ $(document).ready(function() {
 	});
 	
 	function addDraggable(event){
-		alert(event);
 		event.data('event', {
 			title : $.trim(event.text()), // use the element's text as the event title
 			stick : true,
@@ -162,7 +184,58 @@ $(document).ready(function() {
 		//  original position after the drag
 		});
 	}
-
+	function updateEvent(event){
+		alert('/' + event.id);
+		$.ajax({
+			type:'post',
+			url:'/schedule/' + event.id,
+			headers: { 
+			      "Content-Type": "application/json",
+			      "X-HTTP-Method-Override": "POST" },
+			dataType:'text',
+			data: JSON.stringify({ 
+				start:event.start, 
+				end:event.end
+			}),
+			success:function(result){
+				console.log("result: " + result);
+				if(result == 'SUCCESS'){
+					alert("업데이트 되었습니다.");
+				}
+			},
+			error:function(result){
+				console.log(result);
+			}
+	      });
+	}
+	function insertEvent(event){
+		$.ajax({
+				type:'post',
+				url:'/schedule',
+				headers: { 
+				      "Content-Type": "application/json",
+				      "X-HTTP-Method-Override": "POST" },
+				dataType:'text',
+				data: JSON.stringify({
+					title:event.title, 
+					allDay:event.allDay, 
+					editable:event.editable, 
+					durationEditable:event.durationEditable, 
+					start:event.start, 
+					end:event.end, 
+					borderColor:String(event.borderColor), 
+					backgroundColor:String(event.backgroundColor)}),
+				success:function(result){
+					console.log("result: " + result);
+					if(result == 'SUCCESS'){
+						alert("전 송 되었습니다.");
+					}
+				},
+				error:function(result){
+					console.log(result);
+				}
+		      });
+	}
     var isEventOverDiv = function(x, y) {
 
         var external_events = $( '#external-events' );
