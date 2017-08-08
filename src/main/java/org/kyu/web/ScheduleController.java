@@ -25,7 +25,11 @@ public class ScheduleController {
 
 	@Autowired
 	private CalendarRepository calendarRepository;
-
+	
+	@GetMapping("/hihi")
+	public String dkdk() {
+		return "schedule/basic-views";
+	}
 	@GetMapping("/getcurrent")
 	public @ResponseBody Long getindex() {
 		return calendarRepository.count();

@@ -13,12 +13,14 @@ $(document).ready(function() {
 			week : '주간 계획',
 			day : '일간 계획'
 		},
+		navLinks : true,
+		editable : true,
 		eventSources: [
-
 	        // your event source
 	        {
 	            url: '/schedule/load',
 	            type: 'POST',
+	            editable : true
 	        }
 	    ],
 		timeFormat : "HH:mm",
@@ -26,7 +28,6 @@ $(document).ready(function() {
 		monthNamesShort: ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
 		dayNames: ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"],
 		dayNamesShort: ["일", "월", "화", "수", "목", "금", "토"],
-		editable : true,
 		droppable : true, // this allows things to be dropped onto the calendar
 		drop : function(date, allDay) {
             // is the "remove after drop" checkbox checked?
@@ -36,9 +37,7 @@ $(document).ready(function() {
             }
 		},
 		eventDrop: function(event, delta, revertFunc) {
-	        alert(event.id + "일정을 " + event.start.format() + "날짜로 옮깁니다.");
-	        alert(event.id);
-	        alert(event.title);
+	        alert(event.id + " 일정을 " + event.start.format() + "날짜로 옮깁니다.");
 	        if (!confirm("일정을 변경하시겠어요?")) {
 	            revertFunc();
 	        }
@@ -46,7 +45,7 @@ $(document).ready(function() {
 	        updateEvent(event);
 
 	    },
-	    eventAfterRender : function(event, element, view){
+	    eventAfterAllRender : function(event, element, view){
 	    		
 	    },
 	    eventReceive:function(event){
@@ -86,17 +85,16 @@ $(document).ready(function() {
 			console.log(new_event);
 			insertEvent(new_event);
 	    },
-	    eventResizeStop :function( event, jsEvent, ui, view ) { 
-	    		alert("일정 변경");
+	    eventResize :function(event , delta , revertFunc , jsEvent , ui , view) { 
+	    		updateEvent(event);
 	    },
 		eventDragStop: function(event, jsEvent, ui, view) {
-            alert("zz");
             if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
                 $('#calendar').fullCalendar('removeEvents', event._id);
             }
         },
-        eventRender: function(event, element) {
-        		
+        eventAfterRender: function(event, element) {
+	
 	    }
 	});
 	
@@ -123,7 +121,6 @@ $(document).ready(function() {
 		});
 	});
 
-	
 	//external event form
 	var externalEvents = $('#external-events');
 	// Color switchers
@@ -186,6 +183,7 @@ $(document).ready(function() {
 	}
 	function updateEvent(event){
 		alert('/' + event.id);
+		alert(event.end);
 		$.ajax({
 			type:'post',
 			url:'/schedule/' + event.id,
@@ -199,7 +197,7 @@ $(document).ready(function() {
 			}),
 			success:function(result){
 				console.log("result: " + result);
-				if(result == 'SUCCESS'){
+				if(result == 'SUCCEUSS'){
 					alert("업데이트 되었습니다.");
 				}
 			},
@@ -219,8 +217,8 @@ $(document).ready(function() {
 				data: JSON.stringify({
 					title:event.title, 
 					allDay:event.allDay, 
-					editable:event.editable, 
-					durationEditable:event.durationEditable, 
+					editable:true, 
+					durationEditable:true, 
 					start:event.start, 
 					end:event.end, 
 					borderColor:String(event.borderColor), 
