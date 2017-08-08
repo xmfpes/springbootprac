@@ -1,6 +1,10 @@
 package org.kyu.web;
 
 import org.kyu.domain.QuestionRepository;
+import org.kyu.domain.User;
+
+import javax.servlet.http.HttpSession;
+
 import org.kyu.domain.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +22,10 @@ public class QuestionController {
 	private QuestionRepository questionrepository;
 	
 	@GetMapping("/form")
-	public String form() {
+	public String form(HttpSession session) {
+		if(!HttpSessionUtils.isLoginUser(session)) {
+			return "/users/loginForm";
+		}
 		return "qna/form";
 	}
 	
@@ -35,8 +42,13 @@ public class QuestionController {
 	}
 	
 	@PostMapping("")
-	public String create(Question qus) {
-		questionrepository.save(qus);
+	public String create(String title, String contents, HttpSession session) {
+		if(!HttpSessionUtils.isLoginUser(session)) {
+			return "/users/loginForm";
+		}
+		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		Question newQuestion = new Question(sessionedUser.getUserId(), title, contents);
+		questionrepository.save(newQuestion);
 		return "redirect:/qna";
 	}
 }

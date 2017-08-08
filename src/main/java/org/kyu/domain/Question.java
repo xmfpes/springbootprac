@@ -11,6 +11,13 @@ public class Question {
 	@GeneratedValue
 	private Long id;
 	
+	public Question() {}
+	public Question(String writer, String title, String contents) {
+		super();
+		this.writer = writer;
+		this.title = title;
+		this.contents = contents;
+	}
 	@Column(nullable=false, length=20)
 	private String writer;
 	private String title;
