@@ -30,10 +30,7 @@ public class User {
 				+ email + "]";
 	}
 	public boolean matchPassword(String password) {
-		if(password == null) {
-			return false;
-		}
-		return password.equals(this.password);
+		return this.password.equals(password);
 	}
 	public boolean matchId(Long id) {
 		if(id == null) {
@@ -41,10 +38,13 @@ public class User {
 		}
 		return id.equals(this.id);
 	}
-	public void update(User user) {
-		this.password = user.getPassword();
-		this.email = user.getEmail();
-		this.name = user.getName();
+	public boolean update(User user) {
+		if(matchPassword(user.getPassword())) {
+			this.email = user.getEmail();
+			this.name = user.getName();
+			return true;
+		}
+		return false;
 	}
 	public String getUserId() {
 		return userId;

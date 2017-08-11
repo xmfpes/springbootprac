@@ -1,11 +1,13 @@
 package org.kyu.domain;
 
-import java.awt.Color;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Calendar {
@@ -16,6 +18,16 @@ public class Calendar {
 	private String backgroundColor;
 	private String borderColor;
 	
+	@ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+	private User writer;
+	
+	public User getWriter() {
+		return writer;
+	}
+	public void setWriter(User writer) {
+		this.writer = writer;
+	}
 	public void updateDate(Calendar calendar) {
 		this.start = calendar.getStart();
 		this.end = calendar.getEnd();
@@ -83,8 +95,8 @@ public class Calendar {
 	@Override
 	public String toString() {
 		return "Calendar [id=" + id + ", backgroundColor=" + backgroundColor + ", borderColor=" + borderColor
-				+ ", title=" + title + ", start=" + start + ", end=" + end + ", allDay=" + allDay + ", editable="
-				+ editable + ", durationEditable=" + durationEditable + "]";
+				+ ", writer=" + writer + ", title=" + title + ", start=" + start + ", end=" + end + ", allDay=" + allDay
+				+ ", editable=" + editable + ", durationEditable=" + durationEditable + "]";
 	}
 	
 }

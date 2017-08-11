@@ -1,4 +1,4 @@
-package org.kyu.web;
+package org.kyu.util;
 
 import javax.servlet.http.HttpSession;
 

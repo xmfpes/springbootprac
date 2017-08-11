@@ -5,6 +5,11 @@
 <link href="/fullcalendar/fullcalendar.min.css" rel="stylesheet">
 <link href="/fullcalendar/fullcalendar.print.min.css" rel="stylesheet" media="print">
 <link href="/fullcalendar/public/design.css" rel="stylesheet">
+<script src="/fullcalendar/lib/jquery.min.js"></script>
+<script src="/fullcalendar/lib/moment.min.js"></script>
+<script src="/fullcalendar/lib/jquery-ui.min.js"></script>
+<script src="/fullcalendar/fullcalendar.min.js"></script>
+<script src="/fullcalendar/public/schedule.js"></script>
 </head>
 {{> include/nav}}
 
@@ -16,24 +21,15 @@
 				<div class="panel panel-default content-main">
 					<h4>일정 목록</h4>
 					<div id="external-events" class="external-events-trash">
-						<div class="fc-event ui-draggable ui-draggable-handle">My
-							Event 1</div>
-						<div class="fc-event ui-draggable ui-draggable-handle">My
-							Event 2</div>
-						<div class="fc-event ui-draggable ui-draggable-handle">My
-							Event 3</div>
-						<div class="fc-event ui-draggable ui-draggable-handle">My
-							Event 4</div>
-						<div class="fc-event ui-draggable ui-draggable-handle">My
-							Event 5</div>
+						<div class="fc-event ui-draggable ui-draggable-handle">공부</div>
 						<p>
 							<input type="checkbox" id="drop-remove"> <label
-								for="drop-remove">일정 등록후 제거</label>
+								for="drop-remove">등록 후 목록에서 제거</label>
 						</p>
 					</div>
 				</div>
 				<div id="add-events" class="panel panel-default content-main">
-					<h4>일정 입력</h4>
+					<h4>일정 추가</h4>
 					<div class="panel-body">
 						<div class="input-group mb">
 							<input type="text" placeholder="일정 입력"
@@ -66,26 +62,18 @@
 							<li class="p0"><a href="javascript:void(0);"
 								class="point point-purple point-xl"></a></li>
 						</ul>
-						<p class="text-muted">
-							<small>시간 선택</small>
-						</p>
-						<input type="text" name="timepicker" class="timepicker"/>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-9">
 				<div class="panel panel-default content-main">
+						<input type="hidden" id="sessionId" value="{{SessionedUser.id}}" />
+						<input type="hidden" id="sessionuserId" value="{{SessionedUser.userId}}"/>
 					<div id="calendar"></div>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<script src="/fullcalendar/lib/moment.min.js"></script>
-	<script src="/fullcalendar/lib/jquery.min.js"></script>
-	<script src="/fullcalendar/lib/jquery-ui.min.js"></script>
-	<script src="/fullcalendar/fullcalendar.min.js"></script>
-	<script src="/fullcalendar/public/schedule.js"></script>
 	
 </body>
 </html>

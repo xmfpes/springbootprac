@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.kyu.domain.User;
 import org.kyu.domain.UserRepository;
+import org.kyu.util.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,13 +38,14 @@ public class UserController {
 		}
 		
 		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-		if(sessionedUser.matchId(id)) {
+		if(!sessionedUser.matchId(id)) {
 			throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
 		}
 		
 		User user = userRepository.findOne(id);
-		user.update(updateUser);
-		userRepository.save(user);
+		if(user.update(updateUser)) {
+			userRepository.save(user);
+		}
 		return "redirect:/users";
 	}
 	
@@ -54,7 +56,7 @@ public class UserController {
 		}
 		
 		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-		if(sessionedUser.matchId(id)) {
+		if(!sessionedUser.matchId(id)) {
 			throw new IllegalStateException("자신의 정보만 수정할 수 있습니다.");
 		}
 		
@@ -77,12 +79,12 @@ public class UserController {
 	public String login(String userId, String password, HttpSession session) {
 		User user = userRepository.findByUserId(userId);
 		if(user == null) {
-			System.out.println("login failed");
+			System.out.println("login failed1");
 			return "redirect:/users/loginForm";
 		}
 		if(!user.matchPassword(password)) {
-			System.out.println("login failed");
-			return "redirect:/users/loginForm";
+			System.out.println("login failed2");
+			return "redirect:/users/login_failed";
 		}
 		
 		session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);

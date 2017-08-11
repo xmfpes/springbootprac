@@ -2,8 +2,12 @@ package org.kyu.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Question {
@@ -12,27 +16,42 @@ public class Question {
 	private Long id;
 	
 	public Question() {}
-	public Question(String writer, String title, String contents) {
+	public Question(User writer, String title, String contents) {
 		super();
 		this.writer = writer;
 		this.title = title;
 		this.contents = contents;
 	}
-	@Column(nullable=false, length=20)
-	private String writer;
+	
+	@ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+	private User writer;
+	
+	public User getWriter() {
+		return writer;
+	}
+	public void setWriter(User writer) {
+		this.writer = writer;
+	}
+
+	@Column(nullable=false, length=30)
 	private String title;
+	
+	@Column(nullable=false)
 	private String contents;
+	
+	public void updateQuestion(String title, String contents) {
+		this.title = title;
+		this.contents = contents;
+	}
+	public boolean isCurrentWriter(User user) {
+		return writer.getId() == user.getId();
+	}
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public String getWriter() {
-		return writer;
-	}
-	public void setWriter(String writer) {
-		this.writer = writer;
 	}
 	public String getTitle() {
 		return title;

@@ -18,9 +18,7 @@ $(document).ready(function() {
 		eventSources: [
 	        // your event source
 	        {
-	            url: '/schedule/load',
-	            type: 'POST',
-	            editable : true
+	            url: '/calendar/' + $('#sessionId').val()
 	        }
 	    ],
 		timeFormat : "HH:mm",
@@ -29,7 +27,7 @@ $(document).ready(function() {
 		dayNames: ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"],
 		dayNamesShort: ["일", "월", "화", "수", "목", "금", "토"],
 		droppable : true, // this allows things to be dropped onto the calendar
-		drop : function(date, allDay) {
+		drop : function(date) {
             // is the "remove after drop" checkbox checked?
             if ($('#drop-remove').is(':checked')) {
                 // if so, remove the element from the "Draggable Events" list
@@ -50,19 +48,8 @@ $(document).ready(function() {
 	    },
 	    eventReceive:function(event){
 
-	    	var new_event = {};
-	    		$.ajax({
-	    		  dataType: "json",
-	    		  url: 'schedule/getcurrent',
-	    		  success:function(result){
-					event.id = result + 1;
-					alert(new_event.id);
-				},
-				error:function(result){
-					alert(result);
-				}
-	    		});
-	    		
+	    		var new_event = {};
+
 			new_event.borderColor = event.borderColor;
 			new_event.title = event.title;
 			new_event.start = event.start;
@@ -83,14 +70,15 @@ $(document).ready(function() {
 			//new_event.owner_id = $_SESS['user_id']		
 			console.log(event);
 			console.log(new_event);
-			insertEvent(new_event);
+			event.id = insertEvent(new_event);
 	    },
 	    eventResize :function(event , delta , revertFunc , jsEvent , ui , view) { 
 	    		updateEvent(event);
 	    },
 		eventDragStop: function(event, jsEvent, ui, view) {
             if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
-                $('#calendar').fullCalendar('removeEvents', event._id);
+                $('#calendar').fullCalendar('removeEvents', event.id);
+                deleteEvent(event);
             }
         },
         eventAfterRender: function(event, element) {
@@ -102,7 +90,7 @@ $(document).ready(function() {
 	-----------------------------------------------------------------*/
 	var currColor = "#f6504d";
 	$('#external-events .fc-event').each(function() {
-
+			
 		// store data so the calendar knows to render an event upon drop
 		$(this).data('event', {
 			title : $.trim($(this).text()), // use the element's text as the event title
@@ -182,21 +170,18 @@ $(document).ready(function() {
 		});
 	}
 	function updateEvent(event){
-		alert('/' + event.id);
-		alert(event.end);
 		$.ajax({
-			type:'post',
-			url:'/schedule/' + event.id,
+			type:'put',
+			url:'/calendar/' + event.id,
 			headers: { 
 			      "Content-Type": "application/json",
-			      "X-HTTP-Method-Override": "POST" },
+			      "X-HTTP-Method-Override": "PUT" },
 			dataType:'text',
 			data: JSON.stringify({ 
 				start:event.start, 
 				end:event.end
 			}),
 			success:function(result){
-				console.log("result: " + result);
 				if(result == 'SUCCEUSS'){
 					alert("업데이트 되었습니다.");
 				}
@@ -206,14 +191,37 @@ $(document).ready(function() {
 			}
 	      });
 	}
+	function deleteEvent(event){
+		$.ajax({
+			type:'delete',
+			url:'/calendar/' + event.id,
+			headers: { 
+			      "Content-Type": "application/json",
+			      "X-HTTP-Method-Override": "DELETE" },
+			dataType:'text',
+			data: JSON.stringify({ 
+				id:event.id
+			}),
+			success:function(result){
+				if(result == 'SUCCEUSS'){
+					alert("내 일정 삭제...");
+				}
+			},
+			error:function(result){
+				console.log(result);
+			}
+	      });
+	}
 	function insertEvent(event){
+		var eventId = null;
 		$.ajax({
 				type:'post',
-				url:'/schedule',
+				url:'/calendar',
 				headers: { 
 				      "Content-Type": "application/json",
 				      "X-HTTP-Method-Override": "POST" },
 				dataType:'text',
+				async: false,
 				data: JSON.stringify({
 					title:event.title, 
 					allDay:event.allDay, 
@@ -223,16 +231,14 @@ $(document).ready(function() {
 					end:event.end, 
 					borderColor:String(event.borderColor), 
 					backgroundColor:String(event.backgroundColor)}),
-				success:function(result){
-					console.log("result: " + result);
-					if(result == 'SUCCESS'){
-						alert("전 송 되었습니다.");
-					}
+				success:function(data){
+					eventId = JSON.parse(data).id;
 				},
 				error:function(result){
 					console.log(result);
 				}
 		      });
+		return eventId;
 	}
     var isEventOverDiv = function(x, y) {
 
