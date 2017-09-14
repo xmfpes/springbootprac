@@ -40,6 +40,10 @@ public class CalendarController {
 	@PostMapping("")
 	public ResponseEntity<Calendar> create(@RequestBody Calendar schedule, HttpSession session) {
 		ResponseEntity<Calendar> entity = null;
+		if(!HttpSessionUtils.isLoginUser(session)) {
+			entity = new ResponseEntity<Calendar>(HttpStatus.BAD_REQUEST);
+			return entity;
+		}
 		logger.info("일정 생성");
 		schedule.setWriter((User) (session.getAttribute(HttpSessionUtils.USER_SESSION_KEY)));
 		Calendar dbCalendar = calendarRepository.save(schedule);

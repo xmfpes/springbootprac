@@ -15,7 +15,7 @@ public class BaseBallController {
 	ArrayList<Integer> computerBalls;
 	@GetMapping("/baseball")
 	public ModelAndView input(String baseBall) {
-		//view에서 보내는 name과 String 변수명이 같아야 알아서 받음
+		
 		if(computerBalls == null)
 			computerBalls = baseball.generateComputerBalls();
 		
@@ -25,7 +25,7 @@ public class BaseBallController {
 		
 		ModelAndView mav = new ModelAndView("baseball/result");
 		mav.addObject("result", result);
-		//model.addattribute와 같음
+		
 		
 		return mav;
 	}
